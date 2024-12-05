@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CapitoleProductApiApplicationTests {
+class CapitoleProductServiceApiApplicationTests {
 
     @InjectMocks
     CapitoleProductApiApplication capitoleProductApiApplication;
