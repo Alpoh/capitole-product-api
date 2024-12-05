@@ -38,3 +38,7 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.bootBuildImage {
+    imageName.set("medina1camilo/capitole-product-api:0.0.1-SNAPSHOT")
+}
