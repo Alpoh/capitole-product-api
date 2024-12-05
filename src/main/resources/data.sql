@@ -1,4 +1,4 @@
-INSERT INTO products (sku, price, description, category)
+INSERT INTO product (sku, price, description, category)
 VALUES ('SKU0001', 19.99, 'Wireless Mouse with ergonomic design', 'Electronics'),
        ('SKU0002', 499.00, '4K Ultra HD Smart TV, 55 inches', 'Electronics'),
        ('SKU0003', 29.50, 'Stainless Steel Water Bottle, 1L', 'Home & Kitchen'),
