@@ -2,19 +2,21 @@ package co.medina.test.capitoleproductapi.domain.service.impl;
 
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import co.medina.test.capitoleproductapi.domain.repository.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
 
     @InjectMocks
@@ -25,10 +27,18 @@ class ProductServiceImplTest {
 
     private Product product;
 
+    private AutoCloseable mocks;
+
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
-        product = new Product("SKU666", 100.0, "Test Product", "Electronics");
+        mocks = MockitoAnnotations.openMocks(this);
+        productService = new ProductServiceImpl(productRepository);
+        product = new Product("SKU001", 100.0, "Test Product", "Electronics");
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        mocks.close();
     }
 
     @Test
@@ -39,7 +49,7 @@ class ProductServiceImplTest {
 
     @Test
     void testCreateProduct() {
-        Mockito.when(productRepository.save(product)).thenReturn(product);
+        Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
 
         Product createdProduct = productService.createProduct(product);
 
@@ -50,13 +60,13 @@ class ProductServiceImplTest {
 
     @Test
     void testGetProductBySku_Success() {
-        Mockito.when(productRepository.findById("SKU001")).thenReturn(Optional.of(product));
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
 
-        Optional<Product> retrievedProduct = productService.getProductBySku("SKU001");
+        Optional<Product> retrievedProduct = productService.getProductBySku("SKU0001");
 
         Assertions.assertTrue(retrievedProduct.isPresent());
         Assertions.assertEquals(product.getSku(), retrievedProduct.get().getSku());
-        Mockito.verify(productRepository, Mockito.times(1)).findById("SKU001");
+        Mockito.verify(productRepository, Mockito.times(1)).findById("SKU0001");
     }
 
     @Test
@@ -82,10 +92,11 @@ class ProductServiceImplTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Mockito.when(productRepository.findById("SKU001")).thenReturn(Optional.of(product));
-        Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(product);
-
         Product updatedProduct = new Product("SKU001", 200.0, "Updated Product", "Electronics");
+
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(updatedProduct));
+        Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(updatedProduct);
+
         Product result = productService.updateProduct("SKU001", updatedProduct);
 
         Assertions.assertNotNull(result);
@@ -94,17 +105,15 @@ class ProductServiceImplTest {
         Mockito.verify(productRepository, Mockito.times(1)).save(Mockito.any(Product.class));
     }
 
-    /*@Test
+    @Test
     void testUpdateProduct_NotFound() {
-        Mockito.when(productRepository.findById("SKU001")).thenReturn(Optional.empty());
+        Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 
         Product updatedProduct = new Product("SKU001", 200.0, "Updated Product", "Electronics");
 
-        Assertions.assertThrows(ProductNotFoundException.class, () -> {
-            productService.updateProduct("SKU001", updatedProduct);
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> productService.updateProduct("SKU001", updatedProduct));
         Mockito.verify(productRepository, Mockito.times(1)).findById("SKU001");
-    }*/
+    }
 
     @Test
     void testDeleteProduct_Success() {
@@ -118,9 +127,7 @@ class ProductServiceImplTest {
     void testDeleteProduct_NotFound() {
         Mockito.doThrow(new RuntimeException("Product not found")).when(productRepository).deleteById("SKU002");
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            productService.deleteProduct("SKU002");
-        });
+        Assertions.assertThrows(RuntimeException.class, () -> productService.deleteProduct("SKU002"));
         Mockito.verify(productRepository, Mockito.times(1)).deleteById("SKU002");
     }
 }
