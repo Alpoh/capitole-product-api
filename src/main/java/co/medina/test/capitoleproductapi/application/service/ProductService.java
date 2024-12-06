@@ -1,4 +1,4 @@
-package co.medina.test.capitoleproductapi.domain.service;
+package co.medina.test.capitoleproductapi.application.service;
 
 import co.medina.test.capitoleproductapi.domain.model.Product;
 

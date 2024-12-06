@@ -1,8 +1,8 @@
-package co.medina.test.capitoleproductapi.domain.service.impl;
+package co.medina.test.capitoleproductapi.application.service.impl;
 
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import co.medina.test.capitoleproductapi.domain.repository.ProductRepository;
-import co.medina.test.capitoleproductapi.domain.service.ProductService;
+import co.medina.test.capitoleproductapi.application.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
