@@ -59,10 +59,10 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void testGetProductBySku_Success() {
+    void testRetrieveProductBySku_Success() {
         Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(product));
 
-        Optional<Product> retrievedProduct = productService.getProductBySku("SKU0001");
+        Optional<Product> retrievedProduct = productService.retrieveProductBySku("SKU0001");
 
         Assertions.assertTrue(retrievedProduct.isPresent());
         Assertions.assertEquals(product.getSku(), retrievedProduct.get().getSku());
@@ -70,20 +70,20 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void testGetProductBySku_NotFound() {
+    void testRetrieveProductBySku_NotFound() {
         Mockito.when(productRepository.findById("SKU002")).thenReturn(Optional.empty());
 
-        Optional<Product> retrievedProduct = productService.getProductBySku("SKU002");
+        Optional<Product> retrievedProduct = productService.retrieveProductBySku("SKU002");
 
         Assertions.assertFalse(retrievedProduct.isPresent());
         Mockito.verify(productRepository, Mockito.times(1)).findById("SKU002");
     }
 
     @Test
-    void testGetAllProducts() {
+    void testRetrieveAllProducts() {
         Mockito.when(productRepository.findAll()).thenReturn(List.of(product));
 
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = productService.retrieveAllProducts();
 
         Assertions.assertEquals(1, products.size());
         Assertions.assertEquals(product.getSku(), products.get(0).getSku());

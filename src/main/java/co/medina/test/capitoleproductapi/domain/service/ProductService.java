@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public interface ProductService {
     Product createProduct(Product product);
-    Optional<Product> getProductBySku(String sku);
-    List<Product> getAllProducts();
+    Optional<Product> retrieveProductBySku(String sku);
+    List<Product> retrieveAllProducts();
     Product updateProduct(String sku, Product product);
     void deleteProduct(String sku);
 }

@@ -23,12 +23,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> getProductBySku(String sku) {
+    public Optional<Product> retrieveProductBySku(String sku) {
         return productRepository.findById(sku);
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public List<Product> retrieveAllProducts() {
         return productRepository.findAll();
     }
 
