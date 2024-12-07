@@ -36,10 +36,9 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(String sku, Product product) {
         return productRepository.findById(sku).map(existingProduct -> {
             Product updatedProduct = new Product(
-                    sku, // Reutiliza el SKU original
+                    sku,
                     product.getPrice(),
-                    product.getDescription(),
-                    product.getCategory()
+                    product.getDescription()
             );
             return productRepository.save(updatedProduct);
         }).orElseThrow(() -> new RuntimeException("Product not found with SKU: " + sku));
