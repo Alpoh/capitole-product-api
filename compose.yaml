@@ -1,6 +1,6 @@
 services:
   app:
-    image: medina1camilo/capitole-product-api:0.0.1-SNAPSHOT # Cambia 'tuusuario' por tu nombre de usuario o usa un nombre local
+    image: medina1camilo/capitole-product-api:0.0.2-SNAPSHOT # Cambia 'tuusuario' por tu nombre de usuario o usa un nombre local
     ports:
       - "8080:8080" # Mapea el puerto 8080 del contenedor al host
     environment:
