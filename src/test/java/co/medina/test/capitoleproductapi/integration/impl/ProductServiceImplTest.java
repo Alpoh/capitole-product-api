@@ -25,7 +25,7 @@ class ProductServiceImplIntegrationTest {
     }
 
     @Test
-    void loadContext(){
+    void loadContext() {
         Assertions.assertNotNull(productService);
     }
 

@@ -1,13 +1,6 @@
 package co.medina.test.capitoleproductapi.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -36,6 +29,14 @@ public class Product {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    // Constructor sin argumentos necesario para JPA
+    public Product() {
+        this.sku = null;
+        this.price = 0.0;
+        this.description = null;
+        this.category = null;
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -45,13 +46,5 @@ public class Product {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    // Constructor sin argumentos necesario para JPA
-    public Product() {
-        this.sku = null;
-        this.price = 0.0;
-        this.description = null;
-        this.category = null;
     }
 }
