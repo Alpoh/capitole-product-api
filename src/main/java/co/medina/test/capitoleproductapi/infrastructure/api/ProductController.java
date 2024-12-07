@@ -5,6 +5,8 @@ import co.medina.test.capitoleproductapi.domain.model.Product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -33,7 +36,7 @@ public class ProductController {
 
     @Operation(summary = "Get a product by SKU")
     @GetMapping("/{sku}")
-    public ResponseEntity<Product> getProduct(@PathVariable String sku) {
+    public ResponseEntity<Product> retrieveProduct(@PathVariable String sku) {
         return productService.retrieveProductBySku(sku)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -41,7 +44,7 @@ public class ProductController {
 
     @Operation(summary = "Get all products")
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<Product> retrieveAllProducts() {
         return productService.retrieveAllProducts();
     }
 
@@ -58,5 +61,28 @@ public class ProductController {
     public ResponseEntity<Void> deleteProduct(@PathVariable String sku) {
         productService.deleteProduct(sku);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Get all products pageable")
+    @GetMapping("/pageable")
+    public ResponseEntity<Page<Product>> retrieveAllProductsPageable(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Page<Product> products = productService.retrieveAllProductsPageable(PageRequest.of(page, size));
+        return ResponseEntity.ok(products);
+    }
+
+    @Operation(summary = "Get all products sorted by SKU, Price, Description and Category")
+    @GetMapping("/sort")
+    public ResponseEntity<List<Product>> getProductsSorted(
+            @RequestParam String sortBy,
+            @RequestParam(defaultValue = "asc") String order
+    ) {
+        if (!List.of("sku", "price", "description", "category").contains(sortBy.toLowerCase())) {
+            throw new IllegalArgumentException("Invalid sort field: " + sortBy);
+        }
+        List<Product> products = productService.retriveProductsSorted(sortBy, order);
+        return ResponseEntity.ok(products);
     }
 }

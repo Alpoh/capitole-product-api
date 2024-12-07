@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "co.medina.test"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 
 java {
     toolchain {
@@ -41,5 +41,5 @@ tasks.withType<Test> {
 }
 
 tasks.bootBuildImage {
-    imageName.set("medina1camilo/capitole-product-api:0.0.1-SNAPSHOT")
+    imageName.set("medina1camilo/capitole-product-api:0.0.2-SNAPSHOT")
 }
