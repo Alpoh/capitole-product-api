@@ -5,7 +5,7 @@ CREATE DATABASE products_db;
 USE products_db;*/
 
 --
-CREATE TABLE product
+CREATE TABLE PRODUCT
 (
     sku         VARCHAR(50) PRIMARY KEY,
     price       DECIMAL(10, 2) NOT NULL,
