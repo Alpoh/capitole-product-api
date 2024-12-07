@@ -31,7 +31,7 @@ class ProductServiceImplIntegrationTest {
 
     @Test
     void testCreateProduct() {
-        Product product = new Product("SKU001", 100.0, "Test Product", "Electronics");
+        Product product = new Product("SKU001", 100.0, "Test Product");
 
         Product createdProduct = productService.createProduct(product);
 
@@ -39,12 +39,11 @@ class ProductServiceImplIntegrationTest {
         Assertions.assertEquals("SKU001", createdProduct.getSku());
         Assertions.assertEquals(100.0, createdProduct.getPrice());
         Assertions.assertEquals("Test Product", createdProduct.getDescription());
-        Assertions.assertEquals("Electronics", createdProduct.getCategory());
     }
 
     @Test
     void testRetrieveProductBySku_Success() {
-        Product product = new Product("SKU002", 200.0, "Another Product", "Home");
+        Product product = new Product("SKU002", 200.0, "Another Product");
         productService.createProduct(product);
 
         Optional<Product> retrievedProduct = productService.retrieveProductBySku("SKU002");
@@ -62,8 +61,8 @@ class ProductServiceImplIntegrationTest {
 
     @Test
     void testRetrieveAllProducts() {
-        productService.createProduct(new Product("SKU003", 150.0, "Product 1", "Category A"));
-        productService.createProduct(new Product("SKU004", 250.0, "Product 2", "Category B"));
+        productService.createProduct(new Product("SKU003", 150.0, "Product 1"));
+        productService.createProduct(new Product("SKU004", 250.0, "Product 2"));
 
         List<Product> allProducts = productService.retrieveAllProducts();
 
@@ -72,22 +71,21 @@ class ProductServiceImplIntegrationTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Product product = new Product("SKU005", 300.0, "Old Product", "Old Category");
+        Product product = new Product("SKU005", 300.0, "Old Product");
         productService.createProduct(product);
 
-        Product updatedProduct = new Product("SKU005", 500.0, "Updated Product", "Updated Category");
+        Product updatedProduct = new Product("SKU005", 500.0, "Updated Product");
 
         Product result = productService.updateProduct("SKU005", updatedProduct);
 
         Assertions.assertNotNull(result);
         Assertions.assertEquals(500.0, result.getPrice());
         Assertions.assertEquals("Updated Product", result.getDescription());
-        Assertions.assertEquals("Updated Category", result.getCategory());
     }
 
     @Test
     void testUpdateProduct_NotFound() {
-        Product updatedProduct = new Product("SKU006", 500.0, "Updated Product", "Updated Category");
+        Product updatedProduct = new Product("SKU006", 500.0, "Updated Product");
 
         RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () ->
                 productService.updateProduct("SKU006", updatedProduct));
@@ -97,7 +95,7 @@ class ProductServiceImplIntegrationTest {
 
     @Test
     void testDeleteProduct_Success() {
-        Product product = new Product("SKU007", 150.0, "Product to Delete", "Category C");
+        Product product = new Product("SKU007", 150.0, "Product to Delete");
         productService.createProduct(product);
 
         productService.deleteProduct("SKU007");

@@ -34,7 +34,7 @@ class ProductServiceImplTest {
     void setUp() {
         mocks = MockitoAnnotations.openMocks(this);
         productService = new ProductServiceImpl(productRepository);
-        product = new Product("SKU001", 100.0, "Test Product", "Electronics");
+        product = new Product("SKU001", 100.0, "Test Product");
     }
 
     @AfterEach
@@ -93,7 +93,7 @@ class ProductServiceImplTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Product updatedProduct = new Product("SKU001", 200.0, "Updated Product", "Electronics");
+        Product updatedProduct = new Product("SKU001", 200.0, "Updated Product");
 
         Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.of(updatedProduct));
         Mockito.when(productRepository.save(Mockito.any(Product.class))).thenReturn(updatedProduct);
@@ -110,7 +110,7 @@ class ProductServiceImplTest {
     void testUpdateProduct_NotFound() {
         Mockito.when(productRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Product updatedProduct = new Product("SKU001", 200.0, "Updated Product", "Electronics");
+        Product updatedProduct = new Product("SKU001", 200.0, "Updated Product");
 
         Assertions.assertThrows(RuntimeException.class, () -> productService.updateProduct("SKU001", updatedProduct));
         Mockito.verify(productRepository, Mockito.times(1)).findById("SKU001");
