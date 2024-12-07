@@ -1,12 +1,14 @@
-package co.medina.test.capitoleproductapi;
+package co.medina.test.capitoleproductapi.unit;
 
+import co.medina.test.capitoleproductapi.CapitoleProductApiApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
-class CapitoleProductServiceApiApplicationTests {
+@ExtendWith(MockitoExtension.class)
+class CapitoleProductApiApplicationTest {
 
     @InjectMocks
     CapitoleProductApiApplication capitoleProductApiApplication;
