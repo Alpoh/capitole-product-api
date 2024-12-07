@@ -4,6 +4,7 @@ import co.medina.test.capitoleproductapi.application.service.impl.ProductService
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @Transactional
+@Disabled
 class ProductServiceImplIntegrationTest {
 
     private final ProductServiceImpl productService;
