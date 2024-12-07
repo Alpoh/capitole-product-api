@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copia el JAR de tu aplicación
-COPY build/libs/mi-aplicacion.jar app.jar
+COPY build/libs/capitole-product-api-0.0.1-SNAPSHOT.jar app.jar
 
 # Exponer el puerto
 EXPOSE 8080
