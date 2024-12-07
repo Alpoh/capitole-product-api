@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -14,6 +17,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "PRODUCT")
 @Entity
@@ -23,11 +27,13 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final String sku;  // Identificador único
-
+    private final String sku;
     private final double price;
     private final String description;
-    private final String category;
+
+    @ManyToMany
+    @JoinTable(name = "PRODUCT_CATEGORY", joinColumns = @JoinColumn(name = "product_sku"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
     @CreationTimestamp
     @Column(updatable = false) // La fecha de creación no debe actualizarse
@@ -41,7 +47,6 @@ public class Product {
         this.sku = null;
         this.price = 0.0;
         this.description = null;
-        this.category = null;
     }
 
     @PrePersist
