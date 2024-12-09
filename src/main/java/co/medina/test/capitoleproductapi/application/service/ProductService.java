@@ -1,5 +1,6 @@
 package co.medina.test.capitoleproductapi.application.service;
 
+import co.medina.test.capitoleproductapi.domain.model.Category;
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,8 @@ public interface ProductService {
     Page<Product> retrieveAllProductsPageable(Pageable pageable);
 
     List<Product> retriveProductsSorted(String sortBy, String order);
+
+    Optional<Category> validateCategoryByName(String categoryName);
+
+    List<Product> retrieveProductsByCategory(Category validCategory);
 }

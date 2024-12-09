@@ -1,6 +1,7 @@
 package co.medina.test.capitoleproductapi.infrastructure.api;
 
 import co.medina.test.capitoleproductapi.application.service.ProductService;
+import co.medina.test.capitoleproductapi.domain.model.Category;
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -75,7 +76,7 @@ public class ProductController {
 
     @Operation(summary = "Get all products sorted by SKU, Price, Description and Category")
     @GetMapping("/sort")
-    public ResponseEntity<List<Product>> getProductsSorted(
+    public ResponseEntity<List<Product>> retrieveProductsSorted(
             @RequestParam String sortBy,
             @RequestParam(defaultValue = "asc") String order
     ) {
@@ -83,6 +84,15 @@ public class ProductController {
             throw new IllegalArgumentException("Invalid sort field: " + sortBy);
         }
         List<Product> products = productService.retriveProductsSorted(sortBy, order);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Product>> retrieveProductsByCategory(@RequestParam String categoryName) {
+        Category validCategory = productService.validateCategoryByName(categoryName)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category: " + categoryName));
+
+        List<Product> products = productService.retrieveProductsByCategory(validCategory);
         return ResponseEntity.ok(products);
     }
 }
