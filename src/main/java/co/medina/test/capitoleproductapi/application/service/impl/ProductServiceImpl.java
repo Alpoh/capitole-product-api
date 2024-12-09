@@ -1,10 +1,15 @@
 package co.medina.test.capitoleproductapi.application.service.impl;
 
+import co.medina.test.capitoleproductapi.application.service.CategoryService;
 import co.medina.test.capitoleproductapi.application.service.ProductService;
+import co.medina.test.capitoleproductapi.domain.model.Category;
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import co.medina.test.capitoleproductapi.domain.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +21,8 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+
+    private final CategoryService categoryService;
 
     @Override
     public Product createProduct(Product product) {
@@ -48,6 +55,28 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(String sku) {
         productRepository.deleteById(sku);
+    }
+
+
+    @Override
+    public Page<Product> retrieveAllProductsPageable(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Product> retriveProductsSorted(String sortBy, String order) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        return productRepository.findAll(Sort.by(direction, sortBy));
+    }
+
+    @Override
+    public Optional<Category> validateCategoryByName(String categoryName) {
+        return categoryService.validateCategoryByName(categoryName);
+    }
+
+    @Override
+    public List<Product> retrieveProductsByCategory(Category validCategory) {
+        return productRepository.findByCategoryName(validCategory.getName());
     }
 
 }

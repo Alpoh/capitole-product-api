@@ -1,6 +1,8 @@
 package co.medina.test.capitoleproductapi.unit.domain.service.impl;
 
+import co.medina.test.capitoleproductapi.application.service.CategoryService;
 import co.medina.test.capitoleproductapi.application.service.impl.ProductServiceImpl;
+import co.medina.test.capitoleproductapi.domain.model.Category;
 import co.medina.test.capitoleproductapi.domain.model.Product;
 import co.medina.test.capitoleproductapi.domain.repository.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +28,9 @@ class ProductServiceImplTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private CategoryService categoryService;
+
     private Product product;
 
     private AutoCloseable mocks;
@@ -33,7 +38,7 @@ class ProductServiceImplTest {
     @BeforeEach
     void setUp() {
         mocks = MockitoAnnotations.openMocks(this);
-        productService = new ProductServiceImpl(productRepository);
+        productService = new ProductServiceImpl(productRepository, categoryService);
         product = new Product("SKU001", 100.0, "Test Product");
     }
 
@@ -130,5 +135,35 @@ class ProductServiceImplTest {
 
         Assertions.assertThrows(RuntimeException.class, () -> productService.deleteProduct("SKU002"));
         Mockito.verify(productRepository, Mockito.times(1)).deleteById("SKU002");
+    }
+
+    @Test
+    void validateCategoryByName_ShouldReturnCategory_WhenCategoryExists() {
+        // Arrange
+        String categoryName = "Electronics";
+        Category mockCategory = new Category("Electronics", "Electronic devices");
+        Mockito.when(categoryService.validateCategoryByName(categoryName)).thenReturn(Optional.of(mockCategory));
+
+        // Act
+        Optional<Category> result = productService.validateCategoryByName(categoryName);
+
+        // Assert
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals("Electronics", result.get().getName());
+        Mockito.verify(categoryService, Mockito.times(1)).validateCategoryByName(categoryName);
+    }
+
+    @Test
+    void validateCategoryByName_ShouldReturnEmpty_WhenCategoryDoesNotExist() {
+        // Arrange
+        String categoryName = "NonExistingCategory";
+        Mockito.when(categoryService.validateCategoryByName(categoryName)).thenReturn(Optional.empty());
+
+        // Act
+        Optional<Category> result = productService.validateCategoryByName(categoryName);
+
+        // Assert
+        Assertions.assertFalse(result.isPresent());
+        Mockito.verify(categoryService, Mockito.times(1)).validateCategoryByName(categoryName);
     }
 }
